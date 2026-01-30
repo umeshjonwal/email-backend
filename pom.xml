@@ -18,36 +18,35 @@
     <artifactId>email-writter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>email-writter</name>
-    <description>Email Reply Generator using Gemini API</description>
+    <description>Email Reply Generator (Groq / Gemini)</description>
 
-    <!-- IMPORTANT: Use Java 17 (Render + Spring Boot compatible) -->
+    <!-- Java version -->
     <properties>
         <java.version>17</java.version>
     </properties>
 
     <dependencies>
 
-        <!-- Spring MVC (REST APIs) -->
+        <!-- ✅ Spring MVC (Controllers + CORS + REST) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- WebClient (for Gemini / external API calls) -->
+        <!-- ✅ WebClient (Groq / Gemini API calls) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- Lombok -->
+        <!-- ✅ Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.38</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing -->
+        <!-- ✅ Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -65,7 +64,7 @@
     <build>
         <plugins>
 
-            <!-- REQUIRED: Lombok works inside Docker -->
+            <!-- Lombok annotation processing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,7 +82,7 @@
                 </configuration>
             </plugin>
 
-            <!-- REQUIRED: creates runnable Spring Boot JAR -->
+            <!-- Spring Boot runnable JAR -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
