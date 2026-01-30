@@ -23,18 +23,28 @@ public class EmailGeneratorService {
     @Value("${groq.api.url}")
     private String groqUrl;
 
-    @Value("${groq.api.key}")
-    private String groqApiKey;
-
     @Value("${groq.model}")
     private String model;
 
+    // ✅ Read API key safely at runtime (NO Spring placeholder)
+    private String getGroqApiKey() {
+        return System.getenv("GROQ_API_KEY");
+    }
+
     public String generateEmailReply(EmailRequest emailRequest) {
+
+        String groqApiKey = getGroqApiKey();
+
+        // ✅ Runtime safety guard
+        if (groqApiKey == null || groqApiKey.isBlank()) {
+            log.error("GROQ_API_KEY is missing");
+            return "Server configuration error: API key is not set.";
+        }
 
         try {
             String prompt = buildPrompt(emailRequest);
 
-            // ✅ CORRECT JSON STRUCTURE FOR GROQ
+            // ✅ Correct Groq request body
             Map<String, Object> body = Map.of(
                     "model", model,
                     "messages", List.of(
@@ -65,7 +75,7 @@ public class EmailGeneratorService {
         }
     }
 
-    // ✅ SAFE JSON PARSING (NO 500)
+    // ✅ Safe JSON parsing (NO 500 errors)
     private String extractText(String response) {
         try {
             ObjectMapper mapper = new ObjectMapper();
