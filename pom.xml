@@ -20,7 +20,7 @@
     <name>email-writter</name>
     <description>Email Reply Generator using Gemini API</description>
 
-    <!-- IMPORTANT: Use Java 17 (Render + Spring Boot compatible) -->
+    <!-- Java version compatible with Docker & Render -->
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -31,12 +31,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- WebClient (for Gemini / external API calls) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <!-- Lombok -->
@@ -54,18 +48,12 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
 
-            <!-- REQUIRED: Lombok works inside Docker -->
+            <!-- Lombok annotation processing (required for Docker builds) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,7 +71,7 @@
                 </configuration>
             </plugin>
 
-            <!-- REQUIRED: creates runnable Spring Boot JAR -->
+            <!-- Creates executable Spring Boot JAR -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
