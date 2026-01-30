@@ -1,19 +1,22 @@
 # ===============================
-# Build stage
+# Build stage (with Maven)
 # ===============================
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copy Maven files
+# Copy pom.xml and download dependencies
 COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code
 COPY src ./src
 
 # Build the JAR
 RUN mvn clean package -DskipTests
 
 # ===============================
-# Runtime stage
+# Runtime stage (lightweight)
 # ===============================
 FROM eclipse-temurin:17-jre-alpine
 
