@@ -1,14 +1,29 @@
-# Use Java 25 runtime
-FROM eclipse-temurin:25-jre
+# ===============================
+# Build stage
+# ===============================
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy jar file
-COPY target/email-writter-0.0.1-SNAPSHOT.jar app.jar
+# Copy pom.xml and source code
+COPY pom.xml .
+COPY src ./src
 
-# Expose port
+# Build the application
+RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+
+# ===============================
+# Runtime stage
+# ===============================
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy JAR from build stage
+COPY --from=builder /app/target/*jar app.jar
+
+# Expose port (Render will override)
 EXPOSE 9090
 
-# Run Spring Boot app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run application
+ENTRYPOINT ["java","-jar","app.jar"]
